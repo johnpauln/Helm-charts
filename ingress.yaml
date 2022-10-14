@@ -1,0 +1,36 @@
+# explains the steps for installing nginx and configuring it to expose services to the internet
+#helm repo add nginx-stable https://helm.nginx.com/stable
+#helm repo update
+#helm install nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true
+# VALIDATE nginx ingress controller is working
+# kubectl get pods --all-namespaces -l app=nginx-ingress-nginx-ingress
+# kubectl get services nginx-ingress-nginx-ingress
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: johnpaul-app
+  annotations:
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: host1.domain.ext
+    http:
+      paths:
+      - path: /home
+        backend:
+          service:
+            name: johnpaul-home-service
+            port:
+              number: 80
+
+  - host: host2.domain.ext
+    http:
+      paths:
+      - path: /movie
+        backend:
+          service:
+            name: johnpaul-movie-service
+            port:
+              number: 80            
